@@ -1,6 +1,6 @@
 # Web Scraper for How Long To Beat with Python
 
-Hello, for those whi don't know the page <ins>[How Long To Beat](https://howlongtobeat.com/)</ins>, this page has a lot of information about games, but they dont have a public API. So, i made this script with Python for get the data of the games.
+Hello, for those whi don't know the page [How Long To Beat](https://howlongtobeat.com/), this page has a lot of information about games, but they dont have a public API. So, i made this script with Python for get the data of the games.
 
 ## Prerequisites
 
@@ -86,7 +86,6 @@ The script will write in file games.json, like this
 
 ## Run in background
 
-<<<<<<< HEAD
 If you preferer, placing the var `option` inside of `webdriver.Firefox()`, the browser will run in background without the need to open it
 
 ```ruby
