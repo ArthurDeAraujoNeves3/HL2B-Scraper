@@ -17,7 +17,7 @@ Hello, for those whi don't know the page <ins>[How Long To Beat](https://howlong
 
 First, clone the repository
 ```ruby
-https://github.com/ArthurDeAraujoNeves3/HL2B-Scraper.git
+git clone https://github.com/ArthurDeAraujoNeves3/HL2B-Scraper.git
 ```
 
 To install all the python libraries, just put this command in terminal
