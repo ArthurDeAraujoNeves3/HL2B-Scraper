@@ -19,8 +19,8 @@ Hello, for those whi don't know the page <ins>[How Long To Beat](https://howlong
 ## Installing
 
 First, clone the repository
-```
-git clone ...
+```ruby
+git clone https://github.com/ArthurDeAraujoNeves3/HL2B-Scraper.git
 ```
 
 To install all the python libraries, just put this command in terminal
@@ -35,7 +35,7 @@ First of all, put all the names of the games if you want in the **gameName** Arr
 gameName = ['Red Dead Redemption 2', 'Minecraft', 'OneShot', 'Half Life']
 ```
 
-After this, just run the scrip
+After this, just run the script
 ```ruby
 python webscraper.py
 ```
@@ -86,6 +86,7 @@ The script will write in file games.json, like this
 
 ## Run in background
 
+<<<<<<< HEAD
 If you preferer, placing the var `option` inside of `webdriver.Firefox()`, the browser will run in background without the need to open it
 
 ```ruby
@@ -93,6 +94,10 @@ browser = webdriver.Firefox(option) #Opening the browser in background
 ```
 
 By default, i have disabled this option
+=======
+> [!CAUTION]
+> While the script is running, **DO NOT CHANGGE ANY .json FILE**
+>>>>>>> 4531a0d57bd58698c51a61103db4877259051050
 
 ## License
 
