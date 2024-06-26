@@ -93,9 +93,6 @@ browser = webdriver.Firefox(option) #Opening the browser in background
 ```
 
 By default, i have disabled this option
-=======
-> [!CAUTION]
-> While the script is running, **DO NOT CHANGGE ANY .json FILE**
 
 ## License
 
