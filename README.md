@@ -32,7 +32,7 @@ First of all, put all the names of the games if you want in the **gameName** Arr
 gameName = ['Red Dead Redemption 2', 'Minecraft', 'OneShot', 'Half Life']
 ```
 
-After this, just run the scrip
+After this, just run the script
 ```ruby
 python webscrapper.py
 ```
@@ -82,7 +82,7 @@ The script will return a structure similar to this
 > For a better experience with the script, i recommend you to use a terminal [Tabby](https://tabby.sh/)
 
 > [!CAUTION]
-> While the script is running, **do not change any .json file**
+> While the script is running, **DO NOT CHANGGE ANY .json FILE**
 
 ## License
 
