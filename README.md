@@ -96,7 +96,6 @@ By default, i have disabled this option
 =======
 > [!CAUTION]
 > While the script is running, **DO NOT CHANGGE ANY .json FILE**
->>>>>>> 4531a0d57bd58698c51a61103db4877259051050
 
 ## License
 
