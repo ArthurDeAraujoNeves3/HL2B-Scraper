@@ -201,6 +201,7 @@ def writingGamesNotFound():
 
 url = 'https://howlongtobeat.com/'
 gameName = [''] #Put the name of the games here
+  
 gamesNotFound = []
 indexName = 0 #This var choice the next game of the list gameName
 gamesFoundedCont = 0 #This var count how many games have been founded
@@ -210,6 +211,7 @@ print('=== \033[0;33mWelcome to Web Scraper HL2B\033[m ===')
 print('\033[0;36mby Arthur de Araujo Neves\033[m')
 print('\033[0;36mMy Github: https://github.com/ArthurDeAraujoNeves3 \033[m')
 print('\033[0;36mJust chill and relax, and let me make the hard work for you ;)\033[m')
+print('\033[0;33mOpening browser...\033[m')
 
 #Starting the browser
 option = Options()
@@ -217,4 +219,17 @@ option.add_argument('--headless') #Make all the process run in background
 browser = webdriver.Firefox() #Opening the browser
 browser.get(url) #Opening the page howlongtobeat.com
 
-openingBrowser( indexName, gamesFoundedCont )
+#Getting the game names in youtGames.json
+try:
+
+    with open("yourGames.json", "r") as yourGamesFile:
+
+        names = json.load(yourGamesFile)
+        gameName = names
+
+        openingBrowser( indexName, gamesFoundedCont )
+    
+except: 
+
+    print("\033[0;31myourGames.json IS BLANK! PLEASE, INSERT THE NAME OF THE GAME THERE!\033[m")
+    anotherGame( len(gameName), gamesFoundedCont )

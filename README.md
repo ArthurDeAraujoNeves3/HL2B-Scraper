@@ -28,6 +28,12 @@ To install all the python libraries, just put this command in terminal
 pip install -r requirements.txt
 ```
 
+## Where put the game names
+
+In **yourGames.json** file, put the names of the games similar to this
+
+![yourGames.json structure](./docs/yourGamesJson.png)
+
 ## How use this script
 
 First of all, put all the names of the games if you want in the **gameName** Array like this
