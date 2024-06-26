@@ -7,42 +7,52 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import json
 
-def openingBrowser(indexName):
+def openingBrowser( indexName, gamesFoundedCont ):
 
     print("Wait 5 seconds...")
     time.sleep(5) #Website loading...
 
     acceptCookies()
-    startingScrapper(indexName)
+    startingScrapper( indexName, gamesFoundedCont )
 
 def acceptCookies():
 
-    print("Accepting the cookies...")
-    browser.find_element(By.ID, 'onetrust-accept-btn-handler').click() #Clicking in Accept cookies
+    try:
+        
+        print("Accepting the cookies...")
+        browser.find_element(By.ID, 'onetrust-accept-btn-handler').click() #Clicking in Accept cookies
+    except:
 
-def startingScrapper(indexName):
+        pass
+
+def startingScrapper( indexName, gamesFoundedCont ):
 
     input = browser.find_element(By.XPATH, "//div[@class='MainNavigation_search__mL_ux']//input") #Getting the search input
     input.send_keys(gameName[indexName])
     input.send_keys(Keys.RETURN)
     
     time.sleep(5)
+    #Verify if founded the game
     try:
 
         browser.find_element(By.XPATH, "//div[@class='GameCard_search_list_image__B2uLH']//a").click() #The game searched
-        getDetails( gameName[indexName], indexName )
+        getDetails( gameName[indexName], indexName, gamesFoundedCont )
 
     except:
 
         print(f"\033[0;31m{gameName[indexName]} NOT FOUND!\033[m")
         gamesNotFound.append(gameName[indexName])
-        anotherGame( indexName )
 
-def getDetails( game, indexName ):
+        anotherGame( indexName, gamesFoundedCont )
 
+def getDetails( game, indexName, gamesFoundedCont ):
+
+    print(f'\033[0;33m[{indexName + 1} / {len(gameName)}]\033[m')
     print(f"Getting the data of \033[0;33m{game}...\033[m")
 
     time.sleep(5)
+
+    #Getting the details
 
     #Main Story, Main + Sides, Completionist and All Styles
     gameTime = browser.find_element(By.CSS_SELECTOR, '.GameStats_game_times__KHrRY.shadow_shadow') 
@@ -51,6 +61,7 @@ def getDetails( game, indexName ):
     #Description of the game
     gameDesc = browser.find_element(By.CSS_SELECTOR, '.GameSummary_profile_info__HZFQu.GameSummary_large__TIGhL')
     gameDescHTML = gameDesc.get_attribute('outerHTML')
+
     #Filtering the text
     #Because of the Read More button, we need remove this part of the text
     if ' ...Read More' in gameDescHTML:
@@ -59,7 +70,8 @@ def getDetails( game, indexName ):
     if '\r\n\r\n' in gameDescHTML:
 
         gameDescHTML = gameDescHTML.replace('\r\n\r\n', ' ')
-    #Developer
+    
+    #Developer of the game
     extraDetailsDivs = browser.find_elements(By.CSS_SELECTOR, '.GameSummary_profile_info__HZFQu.GameSummary_medium___r_ia')
     gameDeveloper = ''
     #This loop is necessary because the page of the game have more than one div with the same class, we want only the developer info
@@ -97,65 +109,75 @@ def getDetails( game, indexName ):
     games['description'] = gameDescSoup.text
     games['developer'] = gameDeveloper
 
-    savingTheJSON( games, indexName )
+    savingTheJSON( games, indexName, gamesFoundedCont )
 
-def savingTheJSON( gameDetails, indexName ):
+def savingTheJSON( gameDetails, indexName, gamesFoundedCont ):
 
-    #Getting the old values in json
-    with open('games.json', 'r') as jsonFileRead:
-
-        print('\033[0;34mReading the games.json...\033[m')
-
-        #If games.json have value, this will load
-        try:
-                
-            gamesJsonValue = json.load(jsonFileRead)
-
-        #If dont, file is blank
-        except:
-
-            gamesJsonValue = ''
-
-        jsonFileRead.close()
+    #Verify if game.json exist
+    try:
         
-    #Joining the old data with the new
+        with open('games.json', 'r') as jsonFileRead:
+
+            print('\033[0;34mReading the games.json...\033[m')
+
+            #If games.json have value, this will load
+            try:
+                    
+                gamesJsonValue = json.load(jsonFileRead)
+
+            #If dont, the file is blank
+            except:
+
+                gamesJsonValue = ''
+
+            jsonFileRead.close()
+
+        #Joining the old data with the new
     
-    valueForJson = []
-    if gamesJsonValue == '':
+        valueForJson = []
+        if gamesJsonValue == '':
 
-        valueForJson.append(gameDetails)
+            valueForJson.append(gameDetails)
 
-    else:
+        else:
 
-        valueForJson = gamesJsonValue 
-        valueForJson.append(gameDetails)
-    
-    jsonValue = json.dumps(valueForJson)
-    jsonFile = open("games.json", "w") #If the file dont exists, then will create
+            valueForJson = gamesJsonValue 
+            valueForJson.append(gameDetails)
+        
+        jsonValue = json.dumps(valueForJson)
+        jsonFile = open("games.json", "w") #If the file dont exists, then will create
 
-    print("\033[0;34mWriting in games.json...\033[m")
-    jsonFile.write(jsonValue)
-    jsonFile.close()
+        print("\033[0;34mWriting in games.json...\033[m")
+        jsonFile.write(jsonValue)
+        jsonFile.close()
 
-    anotherGame( indexName )
+        gamesFoundedCont += 1
+        anotherGame( indexName, gamesFoundedCont )
 
-def anotherGame( indexName ):
+    except:
+
+        print('\033[0;31mTHE [ games.json ] FILE WAS NOT FOUND! PLEASE, CHECK IF THE NAME IS CORRECT OR THA FILE HAS BEEN CREATED...\033[m')
+        anotherGame( len(gameName), gamesFoundedCont )
+
+def anotherGame( indexName, gamesFoundedCont ):
 
     cont = indexName
     cont += 1
     
-    if cont == len(gameName):
+    #Process finished
+    if cont >= len(gameName):
 
         print('\033[0;33mClosing browser...\033[m')
         browser.quit()
 
+        #Showing games not founded
         if gamesNotFound != []:
 
-            print(f'\033[0;31m{len(gamesNotFound)} GAMES NOT FOUND!\033[m')
+            print(f'\033[0;31m{len(gamesNotFound)} GAMES NOT FOUNDED!\033[m')
             print(f'\033[0;34mWriting in gamesNotFound.json\033[m')
             writingGamesNotFound()
 
-        print(f'\033[0;33m[{len(gameName) - len(gamesNotFound)} / {len(gameName)}] games founded\033[m')   
+        print(f'\033[0;33m[{gamesFoundedCont} / {len(gameName)}] games founded\033[m')   
         print('\033[0;33mAll done!\033[m')
         
     else:
@@ -166,7 +188,7 @@ def anotherGame( indexName ):
         time.sleep(5)
 
         indexName = cont
-        startingScrapper( indexName )
+        startingScrapper( indexName, gamesFoundedCont )
 
 def writingGamesNotFound():
 
@@ -178,20 +200,21 @@ def writingGamesNotFound():
 #Starts here
 
 url = 'https://howlongtobeat.com/'
-gameName = ['Red Dead Redemption 2', 'Minecraft', 'OneShot', 'Half Life']
+gameName = [''] #Put the name of the games here
 gamesNotFound = []
 indexName = 0 #This var choice the next game of the list gameName
+gamesFoundedCont = 0 #This var count how many games have been founded
 
 #Welcome message
-print('=== \033[0;33mWelcome to Web Scrapper HL2B\033[m ===')
+print('=== \033[0;33mWelcome to Web Scraper HL2B\033[m ===')
 print('\033[0;36mby Arthur de Araujo Neves\033[m')
 print('\033[0;36mMy Github: https://github.com/ArthurDeAraujoNeves3 \033[m')
 print('\033[0;36mJust chill and relax, and let me make the hard work for you ;)\033[m')
 
 #Starting the browser
 option = Options()
-option.headless = True #Make all the process run in background
+option.add_argument('--headless') #Make all the process run in background 
 browser = webdriver.Firefox() #Opening the browser
 browser.get(url) #Opening the page howlongtobeat.com
 
-openingBrowser(indexName)
+openingBrowser( indexName, gamesFoundedCont )

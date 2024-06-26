@@ -7,6 +7,9 @@ Hello, for those whi don't know the page <ins>[How Long To Beat](https://howlong
 - Python 3.x
 - Firefox ( you can change in the code )
 
+> [!NOTE]
+> For a better experience with the script, i recommend you to use a terminal [Tabby](https://tabby.sh/)
+
 **Python Libraries**
 
 - BeautifulSoup4
@@ -34,7 +37,7 @@ gameName = ['Red Dead Redemption 2', 'Minecraft', 'OneShot', 'Half Life']
 
 After this, just run the scrip
 ```ruby
-python webscrapper.py
+python webscraper.py
 ```
 
 **Script starting**
@@ -43,9 +46,12 @@ python webscrapper.py
 **Script complete**
 ![Script complete](./docs/scriptComplete.png)
 
-## games.json
+> [!CAUTION]
+> While the script is running, **do not change any .json file**
 
-The script will return a structure similar to this
+## Structure of the JSON
+
+The script will write in file games.json, like this
 ```
 [
     {
@@ -78,11 +84,15 @@ The script will return a structure similar to this
 > In games.json, there is a text like this '\u00bd', this text is '½', but in the code, i tried change it with ```replace('\u00bd', '½')``` but when i write it in JSON, itt doesn't work. So, if you use **Visual Studio Code**, just change it with `ctrl + f` and **Replace all**
 ![games.json filter](./docs/gamesJsonFilter.png)
 
-> [!NOTE]
-> For a better experience with the script, i recommend you to use a terminal [Tabby](https://tabby.sh/)
+## Run in background
 
-> [!CAUTION]
-> While the script is running, **do not change any .json file**
+If you preferer, placing the var `option` inside of `webdriver.Firefox()`, the browser will run in background without the need to open it
+
+```ruby
+browser = webdriver.Firefox(option) #Opening the browser in background
+```
+
+By default, i have disabled this option
 
 ## License
 
