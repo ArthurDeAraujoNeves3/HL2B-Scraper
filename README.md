@@ -36,12 +36,7 @@ In **yourGames.json** file, put the names of the games similar to this
 
 ## How use this script
 
-First of all, put all the names of the games if you want in the **gameName** Array like this
-```
-gameName = ['Red Dead Redemption 2', 'Minecraft', 'OneShot', 'Half Life']
-```
-
-After this, just run the script
+Just run the script with the code below
 ```ruby
 python webscraper.py
 ```
