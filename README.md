@@ -80,6 +80,7 @@ The script will write in file games.json, like this
     }
 ]
 ```
+He will catch the fields: Description, platform, developer and conclusion time
 
 > [!NOTE]
 > In games.json, there is a text like this '\u00bd', this text is '½', but in the code, i tried change it with ```replace('\u00bd', '½')``` but when i write it in JSON, itt doesn't work. So, if you use **Visual Studio Code**, just change it with `ctrl + f` and **Replace all**
