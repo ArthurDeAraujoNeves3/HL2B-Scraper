@@ -159,8 +159,8 @@ def savingTheJSON( gameDetails, indexName, gamesFoundedCont ):
             valueForJson = gamesJsonValue 
             valueForJson.append(gameDetails)
         
-        jsonValue = json.dumps(valueForJson)
-        jsonFile = open("games.json", "w") #If the file dont exists, then will create
+        jsonValue = json.dumps(valueForJson, ensure_ascii=False) #ensure_ascii=False dont convert special characters in theirs codes
+        jsonFile = open("games.json", "w", encoding='utf-8') #If the file dont exists, then will create
 
         print("\033[0;34mWriting in games.json...\033[m")
         jsonFile.write(jsonValue)
