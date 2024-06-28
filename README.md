@@ -92,6 +92,9 @@ browser = webdriver.Firefox(option) #Opening the browser in background
 
 By default, i have disabled this option
 
+> [!WARNING]
+> Some games will probably have wrong informations, remember, all the data will be catch by a script, not a human
+
 ## License
 
 [MIT License](License)
