@@ -63,6 +63,7 @@ def getDetails( game, indexName, gamesFoundedCont ):
     gameDescHTML = gameDesc.get_attribute('outerHTML')
 
     #Filtering the text
+
     #Because of the Read More button, we need remove this part of the text
     if ' ...Read More' in gameDescHTML:
 
@@ -72,7 +73,9 @@ def getDetails( game, indexName, gamesFoundedCont ):
         gameDescHTML = gameDescHTML.replace('\r\n\r\n', ' ')
     
     #Developer of the game
-    extraDetailsDivs = browser.find_elements(By.CSS_SELECTOR, '.GameSummary_profile_info__HZFQu.GameSummary_medium___r_ia')
+
+    extraDetailsDivs = browser.find_elements(By.CSS_SELECTOR, '.GameSummary_profile_info__HZFQu.GameSummary_medium___r_ia') #This var contains the developer and platforms of the game
+
     gameDeveloper = ''
     #This loop is necessary because the page of the game have more than one div with the same class, we want only the developer info
     for div in extraDetailsDivs:
@@ -82,6 +85,17 @@ def getDetails( game, indexName, gamesFoundedCont ):
         if 'Developer' in div.text:
 
             gameDeveloper = div.text
+
+    #Platforms
+    
+    gamePlatforms = ''
+    for div in extraDetailsDivs:
+
+        div = BeautifulSoup(div.get_attribute('outerHTML'), 'html.parser')
+
+        if 'Platform' in div.text:
+
+            gamePlatforms = div.text
 
     #Using BeautifulSoup4
 
@@ -108,6 +122,7 @@ def getDetails( game, indexName, gamesFoundedCont ):
     games['details'] = gameTimePd.to_dict("records")
     games['description'] = gameDescSoup.text
     games['developer'] = gameDeveloper
+    games['Platforms'] = gamePlatforms
 
     savingTheJSON( games, indexName, gamesFoundedCont )
 
