@@ -60,7 +60,7 @@ The script will write in file games.json, like this
         "details": [
             {
                 "title": "Main Story",
-                "time": "50\u00bd Hours"
+                "time": "50½ Hours"
             },
             {
                 "title": "Main + Sides",
@@ -72,7 +72,7 @@ The script will write in file games.json, like this
             },
             {
                 "title": "All Styles",
-                "time": "77\u00bd Hours"
+                "time": "77½ Hours"
             }
         ],
         "description": "Red Dead Redemption 2 is an epic tale of life in America's unforgiving heartland. The game's vast and atmospheric world will also provide the foundation for a brand new online multiplayer experience.",
@@ -81,10 +81,6 @@ The script will write in file games.json, like this
 ]
 ```
 He will catch the fields: Description, platform, developer and conclusion time
-
-> [!NOTE]
-> In games.json, there is a text like this '\u00bd', this text is '½', but in the code, i tried change it with ```replace('\u00bd', '½')``` but when i write it in JSON, itt doesn't work. So, if you use **Visual Studio Code**, just change it with `ctrl + f` and **Replace all**
-![games.json filter](./docs/gamesJsonFilter.png)
 
 ## Run in background
 
