@@ -6,6 +6,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import json
+import re
 
 def openingBrowser( indexName, gamesFoundedCont ):
 
@@ -28,7 +29,21 @@ def acceptCookies():
 def startingScrapper( indexName, gamesFoundedCont ):
 
     input = browser.find_element(By.XPATH, "//div[@class='MainNavigation_search__mL_ux']//input") #Getting the search input
-    input.send_keys(gameName[indexName])
+    nameOfTheGame = gameName[indexName]
+
+    #Filtering the game name
+    if '®' in nameOfTheGame:
+
+        nameOfTheGame = nameOfTheGame.replace('®', '')
+    if '™' in nameOfTheGame:
+
+        nameOfTheGame = nameOfTheGame.replace('™', '')
+    #Removing the year of the name
+    if re.search(regex, nameOfTheGame):
+
+        nameOfTheGame = re.sub(regex, '', nameOfTheGame)
+
+    input.send_keys(nameOfTheGame)
     input.send_keys(Keys.RETURN)
     
     time.sleep(5)
@@ -93,7 +108,7 @@ def getDetails( game, indexName, gamesFoundedCont ):
 
         div = BeautifulSoup(div.get_attribute('outerHTML'), 'html.parser')
 
-        if 'Platform' in div.text:
+        if 'Platform:' in div.text or 'Platforms:' in div.text:
 
             gamePlatforms = div.text
 
@@ -128,10 +143,10 @@ def getDetails( game, indexName, gamesFoundedCont ):
 
 def savingTheJSON( gameDetails, indexName, gamesFoundedCont ):
 
-    #Verify if game.json exist
+    #Verify if games.json exist and maximum recursion alert
     try:
         
-        with open('games.json', 'r') as jsonFileRead:
+        with open('games.json', 'r', encoding='utf-8') as jsonFileRead:
 
             print('\033[0;34mReading the games.json...\033[m')
 
@@ -159,7 +174,7 @@ def savingTheJSON( gameDetails, indexName, gamesFoundedCont ):
             valueForJson = gamesJsonValue 
             valueForJson.append(gameDetails)
         
-        jsonValue = json.dumps(valueForJson, ensure_ascii=False) #ensure_ascii=False dont convert special characters in theirs codes
+        jsonValue = json.dumps(valueForJson, ensure_ascii=False) #ensure_ascii=False dont convert special characters in theirs
         jsonFile = open("games.json", "w", encoding='utf-8') #If the file dont exists, then will create
 
         print("\033[0;34mWriting in games.json...\033[m")
@@ -168,10 +183,17 @@ def savingTheJSON( gameDetails, indexName, gamesFoundedCont ):
 
         gamesFoundedCont += 1
         anotherGame( indexName, gamesFoundedCont )
+    
+    except Exception as InespectError:
+        
+        print(InespectError)
+        if InespectError == 'maximum recursion depth exceeded':
 
-    except:
+            print(f'\033[0;31m{InespectError}\033[m')
+        else:
 
-        print('\033[0;31mTHE [ games.json ] FILE WAS NOT FOUND! PLEASE, CHECK IF THE NAME IS CORRECT OR THA FILE HAS BEEN CREATED...\033[m')
+            print('\033[0;31mTHE [ games.json ] FILE WAS NOT FOUND! PLEASE, CHECK IF THE NAME IS CORRECT OR THA FILE HAS BEEN CREATED...\033[m')
+            
         anotherGame( len(gameName), gamesFoundedCont )
 
 def anotherGame( indexName, gamesFoundedCont ):
@@ -207,16 +229,17 @@ def anotherGame( indexName, gamesFoundedCont ):
 
 def writingGamesNotFound():
 
-    jsonValue = json.dumps(gamesNotFound)
-    jsonFile = open("gamesNotFound.json", "w")
+    jsonValue = json.dumps(gamesNotFound, ensure_ascii=False)
+    jsonFile = open("gamesNotFound.json", "w", encoding='utf-8')
     jsonFile.write(jsonValue)
     jsonFile.close()
 
 #Starts here
 
+regex = r"\(.*?\)" #Takes everthing inside of the ()
 url = 'https://howlongtobeat.com/'
-gameName = [''] #Put the name of the games here
-  
+gameName = ['']
+
 gamesNotFound = []
 indexName = 0 #This var choice the next game of the list gameName
 gamesFoundedCont = 0 #This var count how many games have been founded
@@ -230,14 +253,15 @@ print('\033[0;33mOpening browser...\033[m')
 
 #Starting the browser
 option = Options()
-option.add_argument('--headless') #Make all the process run in background 
-browser = webdriver.Firefox() #Opening the browser
+#option.add_argument('--headless') #Make all the process run in background
+option.add_argument('--lang=en_us.UTF-8') #Garantee the JSON dont will change any text
+browser = webdriver.Firefox(option) #Opening the browser
 browser.get(url) #Opening the page howlongtobeat.com
 
 #Getting the game names in youtGames.json
 try:
 
-    with open("yourGames.json", "r") as yourGamesFile:
+    with open("yourGames.json", "r", encoding='utf-8') as yourGamesFile:
 
         names = json.load(yourGamesFile)
         gameName = names
